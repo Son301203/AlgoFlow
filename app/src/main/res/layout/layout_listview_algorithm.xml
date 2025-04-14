@@ -25,7 +25,7 @@
         android:focusable="true" />
 
     <ImageView
-        android:id="@+id/note_image"
+        android:id="@+id/note_image_algorithm"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginEnd="8dp"
