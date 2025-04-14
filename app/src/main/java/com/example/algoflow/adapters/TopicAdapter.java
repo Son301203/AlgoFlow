@@ -5,7 +5,9 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.algoflow.R;
+import com.example.algoflow.activities.AlgorithmsActivity;
 import com.example.algoflow.activities.TopicDescriptionActivity;
 import com.example.algoflow.models.Topic;
 
@@ -70,6 +73,12 @@ public class TopicAdapter extends ArrayAdapter<Topic> {
                 intent.putExtra("topicId", topic.getId());
                 context.startActivity(intent);
             }
+        });
+
+        convertView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, AlgorithmsActivity.class);
+            intent.putExtra("topicId", topic.getId());
+            context.startActivity(intent);
         });
 
         return convertView;
