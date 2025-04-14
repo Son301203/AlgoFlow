@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="14dp"
+    android:background="#F5F6FA"
+    tools:context=".activities.HomeActivity">
+
+    <!-- Title TextView -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AlgoFlow"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        android:textColor="#1A73E8"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp"
+        android:letterSpacing="0.02"/>
+
+    <!-- Subtitle TextView -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Visualizing Data Structures &amp; Algorithms"
+        android:textSize="16sp"
+        android:textColor="#757575"
+        android:layout_gravity="center_horizontal"
+        android:paddingBottom="24dp"/>
+
+    <!-- Search  -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/search_background"
+        android:elevation="6dp"
+        android:padding="8dp"
+        android:layout_marginBottom="24dp"
+        android:clipToPadding="false">
+
+        <EditText
+            android:id="@+id/search_input"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:hint="Search algorithms..."
+            android:textColor="#212121"
+            android:textColorHint="#B0BEC5"
+            android:background="@null"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            android:maxLines="1"
+            android:inputType="text"/>
+
+        <ImageButton
+            android:id="@+id/search_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_search"
+            android:contentDescription="Search"
+            app:tint="#1A73E8" />
+    </LinearLayout>
+
+    <!-- GridView for Topics -->
+    <GridView
+        android:id="@+id/grid_view_topic"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:numColumns="2"
+        android:verticalSpacing="16dp"
+        android:horizontalSpacing="16dp"
+        android:stretchMode="columnWidth"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false"/>
+
+</LinearLayout>

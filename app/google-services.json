@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "67965462822",
+    "project_id": "algoflow-84f4b",
+    "storage_bucket": "algoflow-84f4b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67965462822:android:e930eb59b17978a42ef9e7",
+        "android_client_info": {
+          "package_name": "com.example.algoflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxG8ZBYUAs41FFCXItOYkDajgVlArrB-U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
