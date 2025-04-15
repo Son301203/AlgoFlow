@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">AlgoFlow</string>
+    <string name="login_title">Login</string>
+    <string name="signup_title">Sign up</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="confirm_password_hint">Comfirm password</string>
+    <string name="signup_button">Sign up</string>
+    <string name="login_button">Login</string>
+    <string name="login_link">Have an account? Login</string>
+    <string name="signup_link">Don\'t have an account? Sign up</string>
+
+
 </resources>
