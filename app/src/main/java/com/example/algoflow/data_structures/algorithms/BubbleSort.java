@@ -9,6 +9,9 @@ public class BubbleSort implements Sorting {
     public void sort(int[] array, SortView view) {
         for(int i = 0; i < array.length - 1 && view.isSorting(); i++) {
             for(int j = 0; j < array.length - i - 1 && view.isSorting(); j++){
+                view.checkPause();
+                if (!view.isSorting()) break;
+
                 view.setCurrentIndex(j);
                 view.setCompareIndex(j + 1);
                 if(array[j] > array[j + 1]) {
@@ -21,7 +24,9 @@ public class BubbleSort implements Sorting {
                 try{
                     Thread.sleep(ANIMATION_DEDLAY);
                 }catch (InterruptedException e){
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                    view.setSorting(false);
+                    break;
                 }
             }
         }

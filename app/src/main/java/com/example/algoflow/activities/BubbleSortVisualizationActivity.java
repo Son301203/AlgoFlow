@@ -22,7 +22,7 @@ import com.example.algoflow.R;
 public class BubbleSortVisualizationActivity extends AppCompatActivity {
     private SortView sortView;
     private EditText numsOfArray;
-    private Button randomButton, startButton, pauseButton, resetButton;
+    private Button randomButton, startButton, pauseButton, continueButton, resetButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +38,7 @@ public class BubbleSortVisualizationActivity extends AppCompatActivity {
         randomButton = findViewById(R.id.randomButton);
         startButton = findViewById(R.id.startButton);
         pauseButton = findViewById(R.id.pauseButton);
+        continueButton = findViewById(R.id.continueButton);
         resetButton = findViewById(R.id.resetButton);
 
         sortView.setAlgorithms(new BubbleSort());
@@ -47,6 +48,8 @@ public class BubbleSortVisualizationActivity extends AppCompatActivity {
         startButton.setOnClickListener(v -> sortView.startSorting());
 
         pauseButton.setOnClickListener(v -> sortView.pauseSorting());
+
+        continueButton.setOnClickListener(v -> sortView.resumeSorting());
 
         resetButton.setOnClickListener(v -> sortView.reset());
     }
