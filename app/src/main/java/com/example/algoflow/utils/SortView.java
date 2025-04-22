@@ -51,7 +51,7 @@ public class SortView extends View {
         borderPaint.setColor(Color.GRAY);
         borderPaint.setStrokeWidth(2.0f);
         algorithms = null;
-        animationManager = new AnimationManager(this);
+        animationManager = new AnimationManager(this, array, pauseLock);
     }
 
     public void setAlgorithms(Sorting algorithms) {
@@ -91,24 +91,8 @@ public class SortView extends View {
         compareIndex = index;
     }
 
-    public void animateSwap(int index1, int index2) {
-        animationManager.animateSwap(index1, index2, () -> {
-            int temp = array[index1];
-            array[index1] = array[index2];
-            array[index2] = temp;
-            synchronized (pauseLock) {
-                pauseLock.notify();
-            }
-        });
-
-        synchronized (pauseLock) {
-            try {
-                pauseLock.wait();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                isSorting = false;
-            }
-        }
+    public AnimationManager getAnimationManager() {
+        return animationManager;
     }
 
     @Override
@@ -140,9 +124,9 @@ public class SortView extends View {
 
             // color
             if (i == currentIndex || i == compareIndex) {
-                barPaint.setColor(Color.parseColor("#1cb81c")); // Xanh lá
+                barPaint.setColor(Color.parseColor("#1cb81c"));
             } else {
-                barPaint.setColor(Color.parseColor("#8fd9e3")); // Xanh nhạt
+                barPaint.setColor(Color.parseColor("#8fd9e3"));
             }
             barPaint.setStyle(Paint.Style.FILL);
 
@@ -228,6 +212,7 @@ public class SortView extends View {
         for (int i = 0; i < arraySize; i++) {
             array[i] = random.nextInt(50);
         }
+        animationManager = new AnimationManager(this, array, pauseLock);
         invalidate();
     }
 

@@ -4,8 +4,6 @@ import com.example.algoflow.data_structures.interfaces.Sorting;
 import com.example.algoflow.utils.SortView;
 
 public class BubbleSort implements Sorting {
-    private static final int ANIMATION_DELAY = 1000;
-
     @Override
     public void sort(int[] array, SortView view) {
         for (int i = 0; i < array.length - 1 && view.isSorting(); i++) {
@@ -16,7 +14,7 @@ public class BubbleSort implements Sorting {
                 view.setCurrentIndex(j);
                 view.setCompareIndex(j + 1);
                 if (array[j] > array[j + 1]) {
-                    view.animateSwap(j, j + 1);
+                    view.getAnimationManager().animateSwap(j, j + 1);
                 } else {
                     view.postInvalidate();
                     try {

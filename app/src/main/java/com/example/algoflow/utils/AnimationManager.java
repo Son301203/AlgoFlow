@@ -12,9 +12,13 @@ public class AnimationManager {
     private float animationProgress = 0.0f;
     private int index1 = -1;
     private int index2 = -1;
+    private int[] array; // Thêm tham chiếu đến mảng
+    private final Object pauseLock; // Thêm tham chiếu đến pauseLock
 
-    public AnimationManager(View view) {
+    public AnimationManager(View view, int[] array, Object pauseLock) {
         this.view = view;
+        this.array = array;
+        this.pauseLock = pauseLock;
         initAnimator();
     }
 
@@ -36,43 +40,19 @@ public class AnimationManager {
         });
     }
 
-    // animation swap
-    public void animateSwap(int index1, int index2, Runnable onComplete) {
-        this.index1 = index1;
-        this.index2 = index2;
-        this.isAnimating = true;
-        this.animationProgress = 0.0f;
-
-        animator.removeAllListeners();
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                isAnimating = false;
-                AnimationManager.this.index1 = -1;
-                AnimationManager.this.index2 = -1;
-                onComplete.run();
-                view.invalidate();
-            }
-        });
-
-        view.post(() -> animator.start());
-    }
-
-    // pause animation
+    // Các phương thức khác giữ nguyên
     public void pause() {
         if (isAnimating) {
             animator.pause();
         }
     }
 
-    // resume animation
     public void resume() {
         if (isAnimating) {
             animator.resume();
         }
     }
 
-    // cancel animation
     public void cancel() {
         if (isAnimating) {
             animator.cancel();
@@ -95,12 +75,48 @@ public class AnimationManager {
         return index1;
     }
 
-    public int getIndex2(){
+    public int getIndex2() {
         return index2;
     }
 
-    // animation shift
-    public void animateShift(int fromIndex, int toIndex, Runnable onComplete) {
+    public void animateSwap(int index1, int index2) {
+        this.index1 = index1;
+        this.index2 = index2;
+        this.isAnimating = true;
+        this.animationProgress = 0.0f;
+
+        animator.removeAllListeners();
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                isAnimating = false;
+                int temp = array[index1];
+                array[index1] = array[index2];
+                array[index2] = temp;
+                AnimationManager.this.index1 = -1;
+                AnimationManager.this.index2 = -1;
+                view.invalidate();
+                synchronized (pauseLock) {
+                    pauseLock.notify();
+                }
+            }
+        });
+
+        view.post(() -> animator.start());
+
+        synchronized (pauseLock) {
+            try {
+                pauseLock.wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                if (view instanceof SortView) {
+                    ((SortView) view).setSorting(false);
+                }
+            }
+        }
+    }
+
+    public void animateShift(int fromIndex, int toIndex) {
         this.index1 = fromIndex;
         this.index2 = toIndex;
         this.isAnimating = true;
@@ -113,11 +129,24 @@ public class AnimationManager {
                 isAnimating = false;
                 AnimationManager.this.index1 = -1;
                 AnimationManager.this.index2 = -1;
-                onComplete.run();
                 view.invalidate();
+                synchronized (pauseLock) {
+                    pauseLock.notify();
+                }
             }
         });
 
         view.post(() -> animator.start());
+
+        synchronized (pauseLock) {
+            try {
+                pauseLock.wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                if (view instanceof SortView) {
+                    ((SortView) view).setSorting(false);
+                }
+            }
+        }
     }
 }

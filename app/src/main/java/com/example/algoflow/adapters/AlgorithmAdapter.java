@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import com.example.algoflow.R;
 import com.example.algoflow.activities.AlgorithmDescriptionActivity;
 import com.example.algoflow.activities.BubbleSortVisualizationActivity;
+import com.example.algoflow.activities.InsertionSortVisualizationActivity;
 import com.example.algoflow.activities.TopicDescriptionActivity;
 import com.example.algoflow.models.Algorithm;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -70,8 +71,12 @@ public class AlgorithmAdapter extends ArrayAdapter<Algorithm> {
                             String visualizationPath = task.getString("visualizationPath");
                             switch (visualizationPath){
                                 case "bubble_sort":
-                                    Intent intent = new Intent(context, BubbleSortVisualizationActivity.class);
-                                    context.startActivity(intent);
+                                    Intent intentBubbleSort = new Intent(context, BubbleSortVisualizationActivity.class);
+                                    context.startActivity(intentBubbleSort);
+                                    break;
+                                case "insertion_sort":
+                                    Intent intentInsertionSort = new Intent(context, InsertionSortVisualizationActivity.class);
+                                    context.startActivity(intentInsertionSort);
                                     break;
                             }
                         });

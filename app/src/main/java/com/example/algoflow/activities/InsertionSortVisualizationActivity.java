@@ -1,6 +1,9 @@
 package com.example.algoflow.activities;
 
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,31 +11,27 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 import com.example.algoflow.R;
-import com.example.algoflow.utils.SortView;
 import com.example.algoflow.data_structures.algorithms.BubbleSort;
+import com.example.algoflow.data_structures.algorithms.InsertionSort;
+import com.example.algoflow.utils.SortView;
 
-import com.example.algoflow.R;
-
-public class BubbleSortVisualizationActivity extends AppCompatActivity {
+public class InsertionSortVisualizationActivity extends AppCompatActivity {
     private SortView sortView;
     private EditText numsOfArray;
     private Button randomButton, startButton, pauseButton, continueButton, resetButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_bubble_sort_visualization);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.bubble_sort_main), (v, insets) -> {
+        setContentView(R.layout.activity_insertion_sort_visualization);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.insertion_sort_main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
         sortView = findViewById(R.id.sortView);
         numsOfArray = findViewById(R.id.elementCountInput);
         randomButton = findViewById(R.id.randomButton);
@@ -41,7 +40,7 @@ public class BubbleSortVisualizationActivity extends AppCompatActivity {
         continueButton = findViewById(R.id.continueButton);
         resetButton = findViewById(R.id.resetButton);
 
-        sortView.setAlgorithms(new BubbleSort());
+        sortView.setAlgorithms(new InsertionSort());
 
         randomButton.setOnClickListener(v -> randomNums(numsOfArray));
 
