@@ -14,10 +14,11 @@ import com.example.algoflow.data_structures.interfaces.Sorting;
 
 import java.util.Random;
 
-public class SortView extends View{
+public class SortView extends View {
     private int[] array;
     private Paint barPaint;
     private Paint textPaint;
+    private Paint borderPaint;
     private int arraySize = 5;
     private int currentIndex = -1;
     private int compareIndex = -1;
@@ -26,16 +27,17 @@ public class SortView extends View{
     private Thread sortThread;
     private Sorting algorithms;
     private final Object pauseLock = new Object();
+    private AnimationManager animationManager;
 
     public SortView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    private void init(){
+    private void init() {
         array = new int[arraySize];
         Random random = new Random();
-        for(int i = 0; i < arraySize; i++){
+        for (int i = 0; i < arraySize; i++) {
             array[i] = random.nextInt(50);
         }
         barPaint = new Paint();
@@ -43,25 +45,29 @@ public class SortView extends View{
         textPaint.setColor(Color.BLACK);
         textPaint.setTextSize(30f);
         textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setShadowLayer(2.0f, 1.0f, 1.0f, Color.GRAY);
+        borderPaint = new Paint();
+        borderPaint.setStyle(Paint.Style.STROKE);
+        borderPaint.setColor(Color.GRAY);
+        borderPaint.setStrokeWidth(2.0f);
         algorithms = null;
+        animationManager = new AnimationManager(this);
     }
 
-    public void setAlgorithms(Sorting algorithms){
+    public void setAlgorithms(Sorting algorithms) {
         this.algorithms = algorithms;
     }
 
-    public void setArraySize(int size){
-        if(size > 0 && size <= 20) {
+    public void setArraySize(int size) {
+        if (size > 0 && size <= 20) {
             arraySize = size;
             reset();
         }
     }
-
-
-    public void randomize(){
+    public void randomize() {
         stopSortingThread();
         Random random = new Random();
-        for (int i = 0; i < arraySize; i++){
+        for (int i = 0; i < arraySize; i++) {
             array[i] = random.nextInt(50);
         }
         currentIndex = -1;
@@ -69,11 +75,11 @@ public class SortView extends View{
         invalidate();
     }
 
-    public boolean isSorting(){
+    public boolean isSorting() {
         return isSorting;
     }
 
-    public void setSorting(boolean sorting){
+    public void setSorting(boolean sorting) {
         isSorting = sorting;
     }
 
@@ -85,39 +91,62 @@ public class SortView extends View{
         compareIndex = index;
     }
 
+    public void animateSwap(int index1, int index2) {
+        animationManager.animateSwap(index1, index2, () -> {
+            int temp = array[index1];
+            array[index1] = array[index2];
+            array[index2] = temp;
+            synchronized (pauseLock) {
+                pauseLock.notify();
+            }
+        });
+
+        synchronized (pauseLock) {
+            try {
+                pauseLock.wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                isSorting = false;
+            }
+        }
+    }
+
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
-        if(array == null) return;
+        if (array == null) return;
 
-        // width and margin
         float margin = 10.0f;
         float totalMarginWidth = margin * (arraySize - 1);
         float barWidth = (float) (getWidth() - totalMarginWidth) / arraySize;
         float scaleFactor = 10.0f;
 
-        // border
-        Paint borderPaint = new Paint();
-        borderPaint.setStyle(Paint.Style.STROKE);
-        borderPaint.setColor(Color.GRAY);
-        borderPaint.setStrokeWidth(2.0f);
-
-        for (int i = 0; i < arraySize; i++){
-            // position X
+        for (int i = 0; i < arraySize; i++) {
             float left = i * (barWidth + margin);
             float right = left + barWidth;
+            float barHeight = array[i] * scaleFactor;
 
-            if(i == currentIndex || i == compareIndex) {
-                barPaint.setColor(Color.parseColor("#1cb81c"));
-            }else{
-                barPaint.setColor(Color.parseColor("#8fd9e3"));
+            // bar is swapping
+            if (animationManager.isAnimating() && (i == animationManager.getIndex1() || i == animationManager.getIndex2())) {
+                float startX = animationManager.getIndex1() * (barWidth + margin);
+                float endX = animationManager.getIndex2() * (barWidth + margin);
+                if (i == animationManager.getIndex2()) {
+                    startX = animationManager.getIndex2() * (barWidth + margin);
+                    endX = animationManager.getIndex1() * (barWidth + margin);
+                }
+                left = startX + (endX - startX) * animationManager.getAnimationProgress();
+                right = left + barWidth;
+            }
+
+            // color
+            if (i == currentIndex || i == compareIndex) {
+                barPaint.setColor(Color.parseColor("#1cb81c")); // Xanh lá
+            } else {
+                barPaint.setColor(Color.parseColor("#8fd9e3")); // Xanh nhạt
             }
             barPaint.setStyle(Paint.Style.FILL);
 
-            // height
-            float barHeight = array[i] * scaleFactor;
-
-            // bar column
+            // bar
             canvas.drawRect(
                     left,
                     getHeight() - barHeight,
@@ -125,7 +154,8 @@ public class SortView extends View{
                     getHeight(),
                     barPaint
             );
-            //border
+
+            // border
             canvas.drawRect(
                     left,
                     getHeight() - barHeight,
@@ -147,31 +177,27 @@ public class SortView extends View{
         }
     }
 
-    public void startSorting(){
-        if(!isSorting && (sortThread == null || !sortThread.isAlive())) {
-            if(algorithms == null) return;
+    public void startSorting() {
+        if (!isSorting && (sortThread == null || !sortThread.isAlive())) {
+            if (algorithms == null) return;
             isSorting = true;
             isPaused = false;
-            sortThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    algorithms.sort(array, SortView.this);
-                }
-            });
+            sortThread = new Thread(() -> algorithms.sort(array, SortView.this));
             sortThread.start();
         }
     }
 
-
     public void pauseSorting() {
         if (isSorting && !isPaused) {
             isPaused = true;
+            animationManager.pause();
         }
     }
 
     public void resumeSorting() {
         if (isPaused) {
             isPaused = false;
+            animationManager.resume();
             synchronized (pauseLock) {
                 pauseLock.notify();
             }
@@ -207,6 +233,7 @@ public class SortView extends View{
 
     private void stopSortingThread() {
         if (sortThread != null && sortThread.isAlive()) {
+            animationManager.cancel();
             isPaused = false;
             synchronized (pauseLock) {
                 pauseLock.notify();
@@ -220,4 +247,5 @@ public class SortView extends View{
             sortThread = null;
         }
     }
+
 }
