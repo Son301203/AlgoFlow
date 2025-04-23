@@ -17,6 +17,7 @@ import com.example.algoflow.R;
 import com.example.algoflow.activities.AlgorithmDescriptionActivity;
 import com.example.algoflow.activities.BubbleSortVisualizationActivity;
 import com.example.algoflow.activities.InsertionSortVisualizationActivity;
+import com.example.algoflow.activities.SelectionSortVisualizationActivity;
 import com.example.algoflow.activities.TopicDescriptionActivity;
 import com.example.algoflow.models.Algorithm;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -77,6 +78,10 @@ public class AlgorithmAdapter extends ArrayAdapter<Algorithm> {
                                 case "insertion_sort":
                                     Intent intentInsertionSort = new Intent(context, InsertionSortVisualizationActivity.class);
                                     context.startActivity(intentInsertionSort);
+                                    break;
+                                case "selection_sort":
+                                    Intent intentSelectionSort = new Intent(context, SelectionSortVisualizationActivity.class);
+                                    context.startActivity(intentSelectionSort);
                                     break;
                             }
                         });

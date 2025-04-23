@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 
 import com.example.algoflow.data_structures.interfaces.Sorting;
 
+import org.checkerframework.checker.units.qual.C;
+
 import java.util.Random;
 
 public class SortView extends View {
@@ -22,6 +24,7 @@ public class SortView extends View {
     private int arraySize = 5;
     private int currentIndex = -1;
     private int compareIndex = -1;
+    private int minIndex = -1;
     private boolean isSorting = false;
     private boolean isPaused = false;
     private Thread sortThread;
@@ -72,6 +75,7 @@ public class SortView extends View {
         }
         currentIndex = -1;
         compareIndex = -1;
+        minIndex = -1;
         invalidate();
     }
 
@@ -89,6 +93,10 @@ public class SortView extends View {
 
     public void setCompareIndex(int index) {
         compareIndex = index;
+    }
+
+    public void setMinIndex(int index){
+        minIndex = index;
     }
 
     public AnimationManager getAnimationManager() {
@@ -125,6 +133,8 @@ public class SortView extends View {
             // color
             if (i == currentIndex || i == compareIndex) {
                 barPaint.setColor(Color.parseColor("#1cb81c"));
+            } else if (i == minIndex) {
+                barPaint.setColor(Color.parseColor("#f0294d"));
             } else {
                 barPaint.setColor(Color.parseColor("#8fd9e3"));
             }
@@ -207,6 +217,7 @@ public class SortView extends View {
         isPaused = false;
         currentIndex = -1;
         compareIndex = -1;
+        minIndex = -1;
         array = new int[arraySize];
         Random random = new Random();
         for (int i = 0; i < arraySize; i++) {
