@@ -1,6 +1,6 @@
 package com.example.algoflow.data_structures.interfaces;
 
-import com.example.algoflow.utils.SortView;
+import com.example.algoflow.algorithm_views.SortView;
 
 public interface Sorting {
     public final int ANIMATION_DELAY = 1000;

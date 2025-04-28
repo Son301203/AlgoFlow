@@ -1,7 +1,7 @@
 package com.example.algoflow.data_structures.algorithms;
 
 import com.example.algoflow.data_structures.interfaces.Sorting;
-import com.example.algoflow.utils.SortView;
+import com.example.algoflow.algorithm_views.SortView;
 
 public class InsertionSort implements Sorting {
     @Override

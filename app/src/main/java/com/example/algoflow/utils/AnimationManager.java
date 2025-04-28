@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.view.View;
 
+import com.example.algoflow.algorithm_views.SortView;
+
 public class AnimationManager {
     private final View view;
     private ValueAnimator animator;

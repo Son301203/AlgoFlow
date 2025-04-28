@@ -11,7 +11,7 @@
     tools:context=".activities.SelectionSortVisualizationActivity">
 
     <!-- Custom View for Bubble Sort Visualization -->
-    <com.example.algoflow.utils.SortView
+    <com.example.algoflow.algorithm_views.SortView
         android:id="@+id/sortView"
         android:layout_width="0dp"
         android:layout_height="0dp"

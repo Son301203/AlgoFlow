@@ -18,6 +18,7 @@ import com.example.algoflow.activities.AlgorithmDescriptionActivity;
 import com.example.algoflow.activities.BubbleSortVisualizationActivity;
 import com.example.algoflow.activities.InsertionSortVisualizationActivity;
 import com.example.algoflow.activities.SelectionSortVisualizationActivity;
+import com.example.algoflow.activities.StackWithArrayActivity;
 import com.example.algoflow.activities.TopicDescriptionActivity;
 import com.example.algoflow.models.Algorithm;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -83,6 +84,11 @@ public class AlgorithmAdapter extends ArrayAdapter<Algorithm> {
                                     Intent intentSelectionSort = new Intent(context, SelectionSortVisualizationActivity.class);
                                     context.startActivity(intentSelectionSort);
                                     break;
+                                case "stack_with_array":
+                                    Intent stackWithArray = new Intent(context, StackWithArrayActivity.class);
+                                    context.startActivity(stackWithArray);
+                                    break;
+
                             }
                         });
             }

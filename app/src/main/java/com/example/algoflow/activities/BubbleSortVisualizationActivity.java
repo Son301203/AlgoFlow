@@ -8,16 +8,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-import com.example.algoflow.R;
-import com.example.algoflow.utils.SortView;
-import com.example.algoflow.data_structures.algorithms.BubbleSort;
 
 import com.example.algoflow.R;
+import com.example.algoflow.algorithm_views.SortView;
+import com.example.algoflow.data_structures.algorithms.BubbleSort;
 
 public class BubbleSortVisualizationActivity extends AppCompatActivity {
     private SortView sortView;

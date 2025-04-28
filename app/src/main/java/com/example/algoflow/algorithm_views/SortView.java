@@ -1,4 +1,4 @@
-package com.example.algoflow.utils;
+package com.example.algoflow.algorithm_views;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -11,8 +11,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.example.algoflow.data_structures.interfaces.Sorting;
-
-import org.checkerframework.checker.units.qual.C;
+import com.example.algoflow.utils.AnimationManager;
 
 import java.util.Random;
 

@@ -12,9 +12,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.algoflow.R;
-import com.example.algoflow.data_structures.algorithms.InsertionSort;
 import com.example.algoflow.data_structures.algorithms.SelectionSort;
-import com.example.algoflow.utils.SortView;
+import com.example.algoflow.algorithm_views.SortView;
 
 public class SelectionSortVisualizationActivity extends AppCompatActivity {
     private SortView sortView;
