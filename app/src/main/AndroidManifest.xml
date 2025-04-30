@@ -15,6 +15,9 @@
         android:theme="@style/Theme.AlgoFlow"
         tools:targetApi="31">
         <activity
+            android:name=".activities.QueueWithArrayActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.StackWithArrayActivity"
             android:exported="false" />
         <activity

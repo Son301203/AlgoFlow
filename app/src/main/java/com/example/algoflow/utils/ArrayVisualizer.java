@@ -36,46 +36,74 @@ public class ArrayVisualizer {
         highlightPaint.setStrokeWidth(5f);
     }
 
-    public void drawArray(Canvas canvas, int[] array, int activeIndex, float xOffset, float yOffset){
-        for (int i = 0; i < array.length; i++){
+    // drawArray Stack or Queue
+    public void drawArray(Canvas canvas, int[] array, int head, int tail, int highlightIndex, float xOffset, float yOffset) {
+        for (int i = 0; i < array.length; i++) {
             float left = xOffset + i * (cellWidth + cellSpacing);
             float top = yOffset;
             float right = left + cellWidth;
             float bottom = top + cellHeight;
 
-            // cell background
-            cellPaint.setColor(i <= activeIndex ? Color.parseColor("#1cb81c") : Color.LTGRAY);
+            // Cell background
+            boolean isActive = (head == -1 && tail == -1) ? false : (head <= tail ? i >= head && i <= tail : i <= tail);
+            cellPaint.setColor(isActive ? Color.parseColor("#1cb81c") : Color.LTGRAY);
             canvas.drawRect(left, top, right, bottom, cellPaint);
 
-            // cell value
-            String value = i <= activeIndex ? String.valueOf(array[i]) : "";
+            // Cell value
+            String value = isActive ? String.valueOf(array[i]) : "";
             Rect textBounds = new Rect();
             textPaint.getTextBounds(value, 0, value.length(), textBounds);
             canvas.drawText(value, left + cellWidth / 2, top + cellHeight / 2 + textBounds.height() / 2, textPaint);
 
-            // index cell
+            // Index cell
             canvas.drawText(String.valueOf(i), left + cellWidth / 2, bottom + 20, indexPaint);
 
-            //active cell
-            if(i == activeIndex){
+            // Highlight active cell
+            if (i == highlightIndex) {
                 RectF highlightRect = new RectF(left, top, right, bottom);
                 canvas.drawRect(highlightRect, highlightPaint);
             }
         }
     }
 
+    // draw Array stack
+    public void drawStackArray(Canvas canvas, int[] array, int activeIndex, float xOffset, float yOffset) {
+        drawArray(canvas, array, 0, activeIndex, activeIndex, xOffset, yOffset);
+    }
+
+    // draw Queue stack
+    public void drawQueueArray(Canvas canvas, int[] array, int head, int tail, int highlightIndex, float xOffset, float yOffset) {
+        drawArray(canvas, array, head, tail, highlightIndex, xOffset, yOffset);
+    }
+
+    // width
     public float getTotalWidth(int arraySize) {
         return arraySize * (cellWidth + cellSpacing) - cellSpacing;
     }
 
+    // height
     public float getTotalHeight() {
-        return cellHeight + 40f; //
+        return cellHeight + 40f;
     }
 
-    public void drawTopPointer(Canvas canvas, int topIndex, float xOffset, float yOffset) {
-        if (topIndex >= 0) {
-            float left = xOffset + topIndex * (cellWidth + cellSpacing);
-            canvas.drawText("Top", left + cellWidth / 2, yOffset - 20, indexPaint);
+    //  Queue
+    public void drawQueuePointers(Canvas canvas, int front, int rear, float xOffset, float yOffset) {
+        if(front == rear){
+            float left = xOffset + front * (cellWidth + cellSpacing);
+            canvas.drawText("Head", left + cellWidth / 2, yOffset - 50, indexPaint);
         }
+        if (front >= 0 && front != rear) {
+            float left = xOffset + front * (cellWidth + cellSpacing);
+            canvas.drawText("Head", left + cellWidth / 2, yOffset - 20, indexPaint);
+        }
+        if (rear >= 0) {
+            float left = xOffset + rear * (cellWidth + cellSpacing);
+            canvas.drawText("Tail", left + cellWidth / 2, yOffset - 20, indexPaint);
+        }
+    }
+
+    // Stack
+    public void drawTopPointer(Canvas canvas, int topIndex, float xOffset, float yOffset) {
+        drawQueuePointers(canvas, -1, topIndex, xOffset, yOffset);
     }
 }

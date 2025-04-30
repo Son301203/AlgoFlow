@@ -73,6 +73,9 @@ public class StackWithArrayView extends View {
         }
         highlightIndex = -1;
         invalidate();
+        Toast toast = Toast.makeText(getContext(), "Stack cleared!", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 100);
+        toast.show();
     }
 
     @Override
@@ -84,7 +87,7 @@ public class StackWithArrayView extends View {
         float totalHeight = visualizer.getTotalHeight();
         float xOffset = (getWidth() - totalWidth) / 2;
         float yOffset = (getHeight() - totalHeight) / 2;
-        visualizer.drawArray(canvas, array, highlightIndex, xOffset, yOffset);
+        visualizer.drawStackArray(canvas, array, highlightIndex, xOffset, yOffset);
         visualizer.drawTopPointer(canvas, topIndex, xOffset, yOffset);
     }
 }

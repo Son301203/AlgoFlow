@@ -62,7 +62,6 @@ public class StackWithArray implements IStackQueue {
         return -1;
     }
 
-    @Override
     public int peek() {
         if(!isEmpty()){
             int value = array[topIndex];

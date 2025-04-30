@@ -5,5 +5,4 @@ public interface IStackQueue {
     public boolean isFull();
     public boolean push(int value);
     public int pop();
-    public int peek();
 }
