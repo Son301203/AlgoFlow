@@ -73,7 +73,11 @@ public class LinkedListVisualizer {
                 canvas.drawText(headLabel, x, y - NODE_RADIUS - 20, textPaint);
             }
             if (current.next == null && tailLabel != null && !tailLabel.isEmpty()) {
-                canvas.drawText(tailLabel, x, y - NODE_RADIUS - 20, textPaint);
+                if(index == 0){
+                    canvas.drawText(tailLabel, x, y - NODE_RADIUS - 60, textPaint);
+                }else{
+                    canvas.drawText(tailLabel, x, y - NODE_RADIUS - 20, textPaint);
+                }
             }
 
             // Move to next node position

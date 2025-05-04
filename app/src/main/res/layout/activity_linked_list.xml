@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -21,14 +23,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginBottom="16dp"
+                android:backgroundTint="#E3E8FA"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp">
 
-                <com.example.algoflow.algorithm_views.LinkedListView
-                    android:id="@+id/linkedListView"
+                <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="8dp" />
+                    android:scrollbars="horizontal"
+                    android:fillViewport="true"
+                    android:padding="8dp">
+
+                    <com.example.algoflow.algorithm_views.LinkedListView
+                        android:id="@+id/linkedListView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="8dp" />
+
+                </HorizontalScrollView>
 
             </com.google.android.material.card.MaterialCardView>
 
@@ -87,6 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:backgroundTint="#E3E8FA"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -115,6 +128,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:text="Random"
+                            android:textColor="#1A73E8"
                             app:icon="@drawable/ic_shuffle"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
@@ -123,6 +137,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:textColor="#1A73E8"
                             android:text="Clear All"
                             app:icon="@drawable/ic_clear"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
@@ -136,6 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:backgroundTint="#E3E8FA"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -162,6 +178,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:backgroundTint="#1A73E8"
                             android:textSize="12dp"
                             android:text="Head"
                             app:icon="@drawable/ic_arrow_start"
@@ -172,6 +189,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:backgroundTint="#1A73E8"
                             android:textSize="12dp"
                             android:text="Index"
                             app:icon="@drawable/ic_add_position"
@@ -182,6 +200,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:backgroundTint="#1A73E8"
                             android:textSize="12dp"
                             android:text="Tail"
                             app:icon="@drawable/ic_arrow_end"
@@ -196,6 +215,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:backgroundTint="#E3E8FA"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -222,6 +242,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:textColor="#1A73E8"
                             android:textSize="12dp"
                             android:text="Head"
                             app:icon="@drawable/ic_delete_start"
@@ -232,6 +253,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:textColor="#1A73E8"
                             android:textSize="12dp"
                             android:text="Index"
                             app:icon="@drawable/ic_delete_position"
@@ -242,6 +264,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:textColor="#1A73E8"
                             android:textSize="12dp"
                             android:text="Tail"
                             app:icon="@drawable/ic_delete_end"
@@ -256,6 +279,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                android:backgroundTint="#E3E8FA"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp">
 
@@ -282,15 +306,15 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="By Value"
+                            android:backgroundTint="#1A73E8"
+                            android:textColor="#FFFFFF"
+                            android:text="BY VALUE"
                             app:icon="@drawable/ic_search"
-                            style="@style/Widget.MaterialComponents.Button.TextButton" />
+                            style="@style/Widget.MaterialComponents.Button" />
 
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
-            <!-- Additional operations could be placed here -->
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
@@ -303,6 +327,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         app:srcCompat="@drawable/ic_speed"
-        app:fabSize="normal" />
+        app:fabSize="normal"
+        app:backgroundTint="#1A73E8" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

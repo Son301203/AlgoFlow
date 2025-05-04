@@ -8,12 +8,15 @@ import com.example.algoflow.data_structures.algorithms.LinkedList;
 import com.example.algoflow.models.ListNode;
 import com.example.algoflow.utils.LinkedListVisualizer;
 
+import java.util.Random;
+
 public class LinkedListView extends View {
     private LinkedList linkedList = new LinkedList();
     private ListNode head;
     private LinkedListVisualizer visualizer;
     private int highlightIndex = -1;
     private static final int ANIMATION_DURATION = 500;
+    private static final Random random = new Random();
 
     public LinkedListView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -117,17 +120,38 @@ public class LinkedListView extends View {
                 if (temp.value == value) {
                     highlightIndex = index;
                     invalidate();
-                    postDelayed(() -> {
-                        highlightIndex = -1;
-                        invalidate();
-                    }, ANIMATION_DURATION);
                     break;
                 }
                 index++;
                 temp = temp.next;
             }
+        }else{
+            highlightIndex = -1;
+            invalidate();
         }
         return found;
+    }
+
+    public void random(){
+        head = null;
+        int nodeQuantity = 5 + random.nextInt(6);
+        for (int i = 0; i < nodeQuantity; i++){
+            int value = 1 + random.nextInt(100);
+            head = linkedList.addToHead(head, value);
+        }
+
+        highlightIndex = nodeQuantity - 1;
+        invalidate();
+        postDelayed(() -> {
+            highlightIndex = -1;
+            invalidate();
+        }, ANIMATION_DURATION);
+    }
+
+    public void clear(){
+        head = null;
+        highlightIndex = -1;
+        invalidate();
     }
 
     @Override
@@ -137,6 +161,6 @@ public class LinkedListView extends View {
         float totalHeight = visualizer.getTotalHeight();
         float startX = (getWidth() - totalWidth) / 2;
         float startY = getHeight() / 2;
-        visualizer.drawLinkedList(canvas, head, highlightIndex, startX, startY, "Head", "");
+        visualizer.drawLinkedList(canvas, head, highlightIndex, startX, startY, "Head", "Tail");
     }
 }
