@@ -17,6 +17,7 @@ import com.example.algoflow.R;
 import com.example.algoflow.activities.AlgorithmDescriptionActivity;
 import com.example.algoflow.activities.BubbleSortVisualizationActivity;
 import com.example.algoflow.activities.InsertionSortVisualizationActivity;
+import com.example.algoflow.activities.LinkedListActivity;
 import com.example.algoflow.activities.QueueWithArrayActivity;
 import com.example.algoflow.activities.SelectionSortVisualizationActivity;
 import com.example.algoflow.activities.StackWithArrayActivity;
@@ -92,6 +93,10 @@ public class AlgorithmAdapter extends ArrayAdapter<Algorithm> {
                                 case "queue_with_array":
                                     Intent queueWithArray = new Intent(context, QueueWithArrayActivity.class);
                                     context.startActivity(queueWithArray);
+                                    break;
+                                case "linked_list":
+                                    Intent linkedList = new Intent(context, LinkedListActivity.class);
+                                    context.startActivity(linkedList);
                                     break;
                             }
                         });
