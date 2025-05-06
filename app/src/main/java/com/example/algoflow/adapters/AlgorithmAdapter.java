@@ -21,6 +21,7 @@ import com.example.algoflow.activities.LinkedListActivity;
 import com.example.algoflow.activities.QueueWithArrayActivity;
 import com.example.algoflow.activities.SelectionSortVisualizationActivity;
 import com.example.algoflow.activities.StackWithArrayActivity;
+import com.example.algoflow.activities.StackWithLinkedListActivity;
 import com.example.algoflow.activities.TopicDescriptionActivity;
 import com.example.algoflow.models.Algorithm;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -97,6 +98,10 @@ public class AlgorithmAdapter extends ArrayAdapter<Algorithm> {
                                 case "linked_list":
                                     Intent linkedList = new Intent(context, LinkedListActivity.class);
                                     context.startActivity(linkedList);
+                                    break;
+                                case "stack_with_linked_list":
+                                    Intent stackWithLinkedList = new Intent(context, StackWithLinkedListActivity.class);
+                                    context.startActivity(stackWithLinkedList);
                                     break;
                             }
                         });

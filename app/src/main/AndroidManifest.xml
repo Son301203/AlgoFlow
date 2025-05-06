@@ -15,6 +15,9 @@
         android:theme="@style/Theme.AlgoFlow"
         tools:targetApi="31">
         <activity
+            android:name=".activities.StackWithLinkedListActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.LinkedListActivity"
             android:exported="false" />
         <activity
