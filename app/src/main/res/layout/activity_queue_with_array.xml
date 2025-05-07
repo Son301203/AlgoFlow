@@ -16,6 +16,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="12dp"
+        android:backgroundTint="#E3F2FD"
         android:background="@drawable/view_background"
         android:elevation="6dp"
         android:layout_marginBottom="24dp"
@@ -87,7 +88,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:text="Enqueue"
-                    app:backgroundTint="#4DB6AC"
+                    app:backgroundTint="#1A73E8"
                     app:cornerRadius="12dp"
                     android:textColor="@android:color/white" />
 
@@ -98,7 +99,7 @@
                     android:layout_weight="1"
                     android:layout_marginEnd="8dp"
                     android:text="Dequeue"
-                    app:backgroundTint="#FF6F61"
+                    app:backgroundTint="#D32F2F"
                     app:cornerRadius="12dp"
                     android:textColor="@android:color/white" />
 
