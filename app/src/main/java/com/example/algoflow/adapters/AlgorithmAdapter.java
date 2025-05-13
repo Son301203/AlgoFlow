@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 
 import com.example.algoflow.R;
 import com.example.algoflow.activities.AlgorithmDescriptionActivity;
+import com.example.algoflow.activities.BSTActivity;
 import com.example.algoflow.activities.BubbleSortVisualizationActivity;
 import com.example.algoflow.activities.InsertionSortVisualizationActivity;
 import com.example.algoflow.activities.LinkedListActivity;
@@ -107,6 +108,10 @@ public class AlgorithmAdapter extends ArrayAdapter<Algorithm> {
                                 case "queue_with_linked_list":
                                     Intent queueWithLinkedList = new Intent(context, QueueWithLinkedListActivity.class);
                                     context.startActivity(queueWithLinkedList);
+                                    break;
+                                case "binary_search_tree":
+                                    Intent binarySearchTree = new Intent(context, BSTActivity.class);
+                                    context.startActivity(binarySearchTree);
                                     break;
                             }
                         });
