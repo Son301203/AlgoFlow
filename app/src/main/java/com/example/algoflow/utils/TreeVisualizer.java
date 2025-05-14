@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import com.example.algoflow.models.TreeNode;
 
+import java.util.List;
+
 public class TreeVisualizer {
     private Paint nodePaint;
     private Paint textPaint;
@@ -36,7 +38,7 @@ public class TreeVisualizer {
         highlightPaint.setStrokeWidth(4f);
     }
 
-    public void drawTree(Canvas canvas, TreeNode root, float startX, float startY, int highlightValue) {
+    public void drawTree(Canvas canvas, TreeNode root, float startX, float startY, List<Integer> highlightValues) {
         if (root == null) {
             return;
         }
@@ -44,15 +46,15 @@ public class TreeVisualizer {
         // Calculate tree width
         float treeWidth = getTreeWidth(root) * HORIZONTAL_SPACING;
         float centerX = startX + treeWidth / 2;
-        drawNode(canvas, root, centerX, startY, highlightValue);
+        drawNode(canvas, root, centerX, startY, highlightValues);
 
         // Draw connections and children
-        drawConnections(canvas, root, startX, startY, treeWidth, highlightValue);
+        drawConnections(canvas, root, startX, startY, treeWidth, highlightValues);
     }
 
-    private void drawNode(Canvas canvas, TreeNode node, float x, float y, int highlightValue) {
+    private void drawNode(Canvas canvas, TreeNode node, float x, float y, List<Integer> highlightValues) {
         // Draw node
-        if (node.val == highlightValue) {
+        if (highlightValues != null && highlightValues.contains(node.val)) {
             canvas.drawCircle(x, y, NODE_RADIUS, highlightPaint);
         }
         canvas.drawCircle(x, y, NODE_RADIUS, nodePaint);
@@ -64,7 +66,7 @@ public class TreeVisualizer {
         canvas.drawText(value, x, y + textBounds.height() / 2, textPaint);
     }
 
-    private void drawConnections(Canvas canvas, TreeNode root, float startX, float startY, float treeWidth, int highlightValue) {
+    private void drawConnections(Canvas canvas, TreeNode root, float startX, float startY, float treeWidth, List<Integer> highlightValues) {
         if (root == null) return;
 
         float x = startX + treeWidth / 2;
@@ -89,16 +91,16 @@ public class TreeVisualizer {
         if (root.left != null) {
             float leftY = y + VERTICAL_SPACING;
             canvas.drawLine(x, y + NODE_RADIUS, leftX, leftY - NODE_RADIUS, linePaint);
-            drawNode(canvas, root.left, leftX, leftY, highlightValue);
-            drawConnections(canvas, root.left, startX, leftY, leftTreeWidth, highlightValue);
+            drawNode(canvas, root.left, leftX, leftY, highlightValues);
+            drawConnections(canvas, root.left, startX, leftY, leftTreeWidth, highlightValues);
         }
 
         // Right Child
         if (root.right != null) {
             float rightY = y + VERTICAL_SPACING;
             canvas.drawLine(x, y + NODE_RADIUS, rightX, rightY - NODE_RADIUS, linePaint);
-            drawNode(canvas, root.right, rightX, rightY, highlightValue);
-            drawConnections(canvas, root.right, startX + treeWidth - rightTreeWidth, rightY, rightTreeWidth, highlightValue);
+            drawNode(canvas, root.right, rightX, rightY, highlightValues);
+            drawConnections(canvas, root.right, startX + treeWidth - rightTreeWidth, rightY, rightTreeWidth, highlightValues);
         }
     }
 
@@ -108,7 +110,7 @@ public class TreeVisualizer {
         }
         float leftWidth = getTreeWidth(root.left);
         float rightWidth = getTreeWidth(root.right);
-        //  minimum width for a single node
+        // minimum width for a single node
         if (leftWidth == 0 && rightWidth == 0) {
             return 1;
         }

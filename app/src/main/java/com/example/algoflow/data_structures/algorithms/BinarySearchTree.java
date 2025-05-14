@@ -2,8 +2,26 @@ package com.example.algoflow.data_structures.algorithms;
 
 import com.example.algoflow.models.TreeNode;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class BinarySearchTree {
     public TreeNode mRoot;
+    public List<Integer> listOrderTraversal = new ArrayList<>();
+    private OnTraversalStepListener traversalListener;
+    private static final long TRAVERSAL_DELAY_MS = 1000;
+    private AtomicBoolean isTraversalRunning = new AtomicBoolean(false);
+    private volatile boolean cancellationFlag = false;
+
+    public interface OnTraversalStepListener {
+        void onStep(int value);
+        void onTraversalComplete();
+    }
+
+    public void setTraversalListener(OnTraversalStepListener listener) {
+        this.traversalListener = listener;
+    }
 
     public BinarySearchTree() {
         mRoot = null;
@@ -83,6 +101,7 @@ public class BinarySearchTree {
 
     public void clear() {
         mRoot = null;
+        resetTraversalList();
     }
 
     public void random() {
@@ -94,33 +113,149 @@ public class BinarySearchTree {
         }
     }
 
+    public void resetTraversalList() {
+        listOrderTraversal.clear();
+    }
+
     // N - L - R
-    public static void preOrder(TreeNode root) {
-        if (root == null) {
+    public void preOrderTraversal() {
+        if (isTraversalRunning.get() || mRoot == null) {
             return;
         }
-        System.out.print(root.val + " ");
-        preOrder(root.left);
-        preOrder(root.right);
+        resetTraversalList();
+        cancellationFlag = false;
+        isTraversalRunning.set(true);
+        preOrderTraversalStep(mRoot, () -> {
+            isTraversalRunning.set(false);
+            if (traversalListener != null) {
+                traversalListener.onTraversalComplete();
+            }
+        });
+    }
+
+    private void preOrderTraversalStep(TreeNode root, Runnable onComplete) {
+        if (root == null || cancellationFlag) {
+            onComplete.run();
+            return;
+        }
+
+        // add value
+        listOrderTraversal.add(root.val);
+        if (traversalListener != null) {
+            traversalListener.onStep(root.val);
+        }
+
+        // delay
+        new android.os.Handler().postDelayed(() -> {
+            if (cancellationFlag) {
+                onComplete.run();
+                return;
+            }
+            // Traversal left
+            preOrderTraversalStep(root.left, () -> {
+                if (cancellationFlag) {
+                    onComplete.run();
+                    return;
+                }
+                // Traversal right
+                preOrderTraversalStep(root.right, onComplete);
+            });
+        }, TRAVERSAL_DELAY_MS);
     }
 
     // L - N - R
-    public static void inOrder(TreeNode root) {
-        if (root == null) {
+    public void inOrderTraversal() {
+        if (isTraversalRunning.get() || mRoot == null) {
             return;
         }
-        inOrder(root.left);
-        System.out.print(root.val + " ");
-        inOrder(root.right);
+        resetTraversalList();
+        cancellationFlag = false;
+        isTraversalRunning.set(true);
+        inOrderTraversalStep(mRoot, () -> {
+            isTraversalRunning.set(false);
+            if (traversalListener != null) {
+                traversalListener.onTraversalComplete();
+            }
+        });
+    }
+
+    private void inOrderTraversalStep(TreeNode root, Runnable onComplete) {
+        if (root == null || cancellationFlag) {
+            onComplete.run();
+            return;
+        }
+
+        // Traversal left
+        inOrderTraversalStep(root.left, () -> {
+            if (cancellationFlag) {
+                onComplete.run();
+                return;
+            }
+            // add value
+            listOrderTraversal.add(root.val);
+            if (traversalListener != null) {
+                traversalListener.onStep(root.val);
+            }
+
+            //delay
+            new android.os.Handler().postDelayed(() -> {
+                if (cancellationFlag) {
+                    onComplete.run();
+                    return;
+                }
+                // Traversal right
+                inOrderTraversalStep(root.right, onComplete);
+            }, TRAVERSAL_DELAY_MS);
+        });
     }
 
     // L - R - N
-    public static void postOrder(TreeNode root) {
-        if (root == null) {
+    public void postOrderTraversal() {
+        if (isTraversalRunning.get() || mRoot == null) {
             return;
         }
-        postOrder(root.left);
-        postOrder(root.right);
-        System.out.print(root.val + " ");
+        resetTraversalList();
+        cancellationFlag = false;
+        isTraversalRunning.set(true);
+        postOrderTraversalStep(mRoot, () -> {
+            isTraversalRunning.set(false);
+            if (traversalListener != null) {
+                traversalListener.onTraversalComplete();
+            }
+        });
+    }
+
+    private void postOrderTraversalStep(TreeNode root, Runnable onComplete) {
+        if (root == null || cancellationFlag) {
+            onComplete.run();
+            return;
+        }
+
+        // Traversal left
+        postOrderTraversalStep(root.left, () -> {
+            if (cancellationFlag) {
+                onComplete.run();
+                return;
+            }
+            // Traversal right
+            postOrderTraversalStep(root.right, () -> {
+                if (cancellationFlag) {
+                    onComplete.run();
+                    return;
+                }
+                // add value
+                listOrderTraversal.add(root.val);
+                if (traversalListener != null) {
+                    traversalListener.onStep(root.val);
+                }
+
+                // delay
+                new android.os.Handler().postDelayed(onComplete, TRAVERSAL_DELAY_MS);
+            });
+        });
+    }
+
+    public void cancelTraversal() {
+        cancellationFlag = true;
     }
 }
