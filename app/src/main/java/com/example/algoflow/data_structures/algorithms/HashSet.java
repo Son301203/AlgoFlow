@@ -30,6 +30,17 @@ public class HashSet implements IHashing {
         }
     }
 
+    // search key
+    @Override
+    public int get(int key) {
+        if(!contains(key))
+            return -1;
+        int hashValueIndex = hashFunction(key);
+        ArrayList<Integer> bucket = buckets[hashValueIndex];
+        int keyIndex = bucket.indexOf(key);
+        return bucket.get(keyIndex);
+    }
+
     public void put(int key){
         int hashValueIndex = hashFunction(key);
         ArrayList<Integer> bucket = buckets[hashValueIndex];
@@ -48,14 +59,4 @@ public class HashSet implements IHashing {
         return keyIndex >= 0;
     }
 
-    public int search(int key){
-        if(!contains(key))
-            return -1;
-        int hashValueIndex = hashFunction(key);
-        ArrayList<Integer> bucket = buckets[hashValueIndex];
-        int keyIndex = bucket.indexOf(key);
-
-        return bucket.get(keyIndex);
-
-    }
 }
