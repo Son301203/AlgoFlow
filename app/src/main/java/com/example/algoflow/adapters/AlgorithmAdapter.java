@@ -17,6 +17,7 @@ import com.example.algoflow.R;
 import com.example.algoflow.activities.AlgorithmDescriptionActivity;
 import com.example.algoflow.activities.BSTActivity;
 import com.example.algoflow.activities.BubbleSortVisualizationActivity;
+import com.example.algoflow.activities.HashSetActivity;
 import com.example.algoflow.activities.InsertionSortVisualizationActivity;
 import com.example.algoflow.activities.LinkedListActivity;
 import com.example.algoflow.activities.QueueWithArrayActivity;
@@ -112,6 +113,10 @@ public class AlgorithmAdapter extends ArrayAdapter<Algorithm> {
                                 case "binary_search_tree":
                                     Intent binarySearchTree = new Intent(context, BSTActivity.class);
                                     context.startActivity(binarySearchTree);
+                                    break;
+                                case "hash_set":
+                                    Intent hashSet = new Intent(context, HashSetActivity.class);
+                                    context.startActivity(hashSet);
                                     break;
                             }
                         });
