@@ -16,6 +16,10 @@ public class HashMap implements IHashing {
         }
     }
 
+    public ArrayList<HashMapData>[] getBuckets() {
+        return buckets;
+    }
+
     @Override
     public int hashFunction(int key) {
         return key % SIZE;

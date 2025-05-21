@@ -25,4 +25,8 @@ public class HashMapData {
     public void setValue(int value) {
         this.value = value;
     }
+
+    public int getKey() {
+        return key;
+    }
 }
