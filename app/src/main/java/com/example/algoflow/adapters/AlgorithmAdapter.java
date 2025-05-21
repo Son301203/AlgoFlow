@@ -17,6 +17,7 @@ import com.example.algoflow.R;
 import com.example.algoflow.activities.AlgorithmDescriptionActivity;
 import com.example.algoflow.activities.BSTActivity;
 import com.example.algoflow.activities.BubbleSortVisualizationActivity;
+import com.example.algoflow.activities.HashMapActivity;
 import com.example.algoflow.activities.HashSetActivity;
 import com.example.algoflow.activities.InsertionSortVisualizationActivity;
 import com.example.algoflow.activities.LinkedListActivity;
@@ -117,6 +118,10 @@ public class AlgorithmAdapter extends ArrayAdapter<Algorithm> {
                                 case "hash_set":
                                     Intent hashSet = new Intent(context, HashSetActivity.class);
                                     context.startActivity(hashSet);
+                                    break;
+                                case "hash_map":
+                                    Intent hashMap = new Intent(context, HashMapActivity.class);
+                                    context.startActivity(hashMap);
                                     break;
                             }
                         });

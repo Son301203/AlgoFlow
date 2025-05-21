@@ -6,7 +6,7 @@ import com.example.algoflow.models.HashMapData;
 import java.util.ArrayList;
 
 public class HashMap implements IHashing {
-    private final int SIZE = 1000;
+    private final int SIZE = 10;
     private ArrayList<HashMapData>[] buckets;
 
     public HashMap(){
@@ -59,6 +59,31 @@ public class HashMap implements IHashing {
             bucket.add(data);
         }else{
             bucket.get(keyIndex).setValue(value);
+        }
+    }
+
+    public void clear() {
+        for (ArrayList<HashMapData> bucket : buckets) {
+            bucket.clear();
+        }
+    }
+
+    public boolean isEmpty() {
+        for (ArrayList<HashMapData> bucket : buckets) {
+            if (!bucket.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void random(){
+        clear();
+        int nodeCount = 5 + (int) (Math.random() * 6);
+        for (int i = 0; i < nodeCount; i++) {
+            int key = 1 + (int) (Math.random() * 100);
+            int value = 1 + (int) (Math.random() * 100);
+            put(key, value);
         }
     }
 }
