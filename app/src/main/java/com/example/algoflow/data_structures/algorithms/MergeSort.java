@@ -1,61 +1,75 @@
 package com.example.algoflow.data_structures.algorithms;
 
-import com.example.algoflow.algorithm_views.SortView;
-import com.example.algoflow.data_structures.interfaces.Sorting;
+import com.example.algoflow.algorithm_views.RecursionSortView;
+import com.example.algoflow.data_structures.interfaces.RecursionSorting;
 
-public class MergeSort implements Sorting {
+import java.util.ArrayList;
+import java.util.List;
+
+public class MergeSort implements RecursionSorting {
 
     @Override
-    public void sort(int[] array, SortView view) {
-        mergeSort(array, array.length);
+    public void sort(int[] array, RecursionSortView view) {
+        view.startSorting();
+        mergeSort(array, 0, array.length - 1, view);
+        view.finishSort(array);
     }
 
-    private int[] mergeSort(int[] arr, int length){
-        if(length == 1)
-            return arr;
+    private void mergeSort(int[] arr, int start, int end, RecursionSortView view) {
+        if (start >= end) {
+            return;
+        }
 
-        int[] left = splitArr(arr, 0, length / 2);
-        int[] right = splitArr(arr, length / 2, length - length /2);
-
-        left = mergeSort(left, left.length);
-        right = mergeSort(right, right.length);
-
-        return merge(left, right);
+        int mid = start + (end - start) / 2;
+        mergeSort(arr, start, mid, view);
+        mergeSort(arr, mid + 1, end, view);
+        merge(arr, start, mid, end, view);
     }
 
-    private int[] merge(int[] left, int[] right){
-        int length = left.length + right.length;
-        int[] result = new int[length];
-        int i = 0;
-        int j = 0;
-        int count = 0;
+    private void merge(int[] arr, int start, int mid, int end, RecursionSortView view) {
+        int[] left = new int[mid - start + 1];
+        int[] right = new int[end - mid];
 
-        while (count < length){
-            if(i >= left.length){
-                result[count++] = right[j++];
-                continue;
-            }
-            if(j >= right.length){
-                result[count++] = left[i++];
-                continue;
-            }
+        // Copy data to temporary arrays
+        for (int i = 0; i < left.length; i++) {
+            left[i] = arr[start + i];
+        }
+        for (int j = 0; j < right.length; j++) {
+            right[j] = arr[mid + 1 + j];
+        }
 
-            if(left[i] < right[j]){
-                result[count++] = left[i++];
-            }
-            else{
-                result[count++] = right[j++];
+        int i = 0, j = 0, k = start;
+        List<Integer> highlights = new ArrayList<>();
+
+        while (i < left.length && j < right.length) {
+            highlights.clear();
+            highlights.add(k); // Highlight
+            view.updateStep(arr.clone(), highlights);
+            view.checkPause();
+
+            if (left[i] <= right[j]) {
+                arr[k++] = left[i++];
+            } else {
+                arr[k++] = right[j++];
             }
         }
-        return result;
-    }
 
-
-    private int[] splitArr(int[] arr, int i, int size){
-        int[] result = new int[size];
-        for (int j = 0; j < size; j++){
-            result[j] = arr[i + j];
+        while (i < left.length) {
+            highlights.clear();
+            highlights.add(k);
+            view.updateStep(arr.clone(), highlights);
+            view.checkPause();
+            arr[k++] = left[i++];
         }
-        return result;
+
+        while (j < right.length) {
+            highlights.clear();
+            highlights.add(k);
+            view.updateStep(arr.clone(), highlights);
+            view.checkPause();
+            arr[k++] = right[j++];
+        }
+
+        view.updateStep(arr.clone(), new ArrayList<>());
     }
 }
