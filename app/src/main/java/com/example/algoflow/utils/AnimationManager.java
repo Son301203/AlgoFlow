@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.view.View;
 
+import com.example.algoflow.algorithm_views.RecursionSortView;
 import com.example.algoflow.algorithm_views.SortView;
 
 public class AnimationManager {
@@ -14,8 +15,8 @@ public class AnimationManager {
     private float animationProgress = 0.0f;
     private int index1 = -1;
     private int index2 = -1;
-    private int[] array; // Thêm tham chiếu đến mảng
-    private final Object pauseLock; // Thêm tham chiếu đến pauseLock
+    private int[] array;
+    private final Object pauseLock;
 
     public AnimationManager(View view, int[] array, Object pauseLock) {
         this.view = view;
@@ -42,7 +43,6 @@ public class AnimationManager {
         });
     }
 
-    // Các phương thức khác giữ nguyên
     public void pause() {
         if (isAnimating) {
             animator.pause();
@@ -147,6 +147,37 @@ public class AnimationManager {
                 Thread.currentThread().interrupt();
                 if (view instanceof SortView) {
                     ((SortView) view).setSorting(false);
+                }
+            }
+        }
+    }
+
+
+    public void animateStep() {
+        this.isAnimating = true;
+        this.animationProgress = 0.0f;
+
+        animator.removeAllListeners();
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                isAnimating = false;
+                view.invalidate();
+                synchronized (pauseLock) {
+                    pauseLock.notify();
+                }
+            }
+        });
+
+        view.post(() -> animator.start());
+
+        synchronized (pauseLock) {
+            try {
+                pauseLock.wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                if (view instanceof RecursionSortView) {
+                    ((RecursionSortView) view).setSorting(false);
                 }
             }
         }

@@ -21,6 +21,7 @@ import com.example.algoflow.activities.HashMapActivity;
 import com.example.algoflow.activities.HashSetActivity;
 import com.example.algoflow.activities.InsertionSortVisualizationActivity;
 import com.example.algoflow.activities.LinkedListActivity;
+import com.example.algoflow.activities.MergeSortActivity;
 import com.example.algoflow.activities.QueueWithArrayActivity;
 import com.example.algoflow.activities.QueueWithLinkedListActivity;
 import com.example.algoflow.activities.SelectionSortVisualizationActivity;
@@ -90,6 +91,10 @@ public class AlgorithmAdapter extends ArrayAdapter<Algorithm> {
                                 case "selection_sort":
                                     Intent intentSelectionSort = new Intent(context, SelectionSortVisualizationActivity.class);
                                     context.startActivity(intentSelectionSort);
+                                    break;
+                                case "merge_sort":
+                                    Intent megerSort = new Intent(context, MergeSortActivity.class);
+                                    context.startActivity(megerSort);
                                     break;
                                 case "stack_with_array":
                                     Intent stackWithArray = new Intent(context, StackWithArrayActivity.class);

@@ -5,22 +5,33 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import java.util.List;
+import java.util.Random;
 
 public class RecursionSortVisualizer {
-    private Paint rectPaint;
+    private Paint[] barPaints;
     private Paint textPaint;
     private Paint highlightPaint;
-    private Paint linePaint;
-    private final float RECT_WIDTH = 50f;
-    private final float RECT_HEIGHT = 40f;
-    private final float HORIZONTAL_SPACING = 60f;
-    private final float VERTICAL_SPACING = 80f;
+    private Paint sortedPaint;
+    private final float BAR_WIDTH = 40f;
+    private final float BAR_SPACING = 10f;
     private final float TEXT_SIZE = 20f;
+    private final float MAX_HEIGHT = 300f;
+    private static final int MAX_LEVELS = 4;
 
     public RecursionSortVisualizer() {
-        rectPaint = new Paint();
-        rectPaint.setStyle(Paint.Style.FILL);
-        rectPaint.setColor(Color.parseColor("#8fd9e3"));
+        // Khởi tạo mảng màu cho từng mức đệ quy
+        barPaints = new Paint[MAX_LEVELS];
+        int[] colors = {
+                Color.parseColor("#8fd9e3"),
+                Color.parseColor("#FF5722"),
+                Color.parseColor("#FFC107"),
+                Color.parseColor("#4CAF50")
+        };
+        for (int i = 0; i < MAX_LEVELS; i++) {
+            barPaints[i] = new Paint();
+            barPaints[i].setStyle(Paint.Style.FILL);
+            barPaints[i].setColor(colors[i % colors.length]);
+        }
 
         textPaint = new Paint();
         textPaint.setStyle(Paint.Style.FILL);
@@ -29,47 +40,48 @@ public class RecursionSortVisualizer {
         textPaint.setTextAlign(Paint.Align.CENTER);
 
         highlightPaint = new Paint();
-        highlightPaint.setStyle(Paint.Style.STROKE);
-        highlightPaint.setColor(Color.parseColor("#FFFF66"));
-        highlightPaint.setStrokeWidth(4f);
+        highlightPaint.setStyle(Paint.Style.FILL);
+        highlightPaint.setColor(Color.parseColor("#FFFF66")); // Highlight
 
-        linePaint = new Paint();
-        linePaint.setColor(Color.BLACK);
-        linePaint.setStrokeWidth(2f);
+        sortedPaint = new Paint();
+        sortedPaint.setStyle(Paint.Style.FILL);
+        sortedPaint.setColor(Color.parseColor("#2196F3")); //done
     }
 
-    public void drawRecursionTree(Canvas canvas, List<int[]> arrays, List<Integer> highlights, float startX, float startY) {
-        if (arrays == null || arrays.isEmpty()) return;
+    public void drawBars(Canvas canvas, int[] array, List<Integer> comparingIndices, List<Integer> sortedIndices, int level, float startX, float startY) {
+        if (array == null || array.length == 0 || array.length > 10) return;
 
-        //  recursion
-        for (int i = 0; i < arrays.size(); i++) {
-            int[] arr = arrays.get(i);
-            float x = startX + (i % 2 == 0 ? -HORIZONTAL_SPACING * (arrays.size() / 2 - i / 2) : HORIZONTAL_SPACING * (i / 2 + 1));
-            float y = startY + (i / 2) * VERTICAL_SPACING;
+        float totalWidth = array.length * (BAR_WIDTH + BAR_SPACING) - BAR_SPACING;
+        float xOffset = startX - totalWidth / 2;
 
-            for (int j = 0; j < arr.length; j++) {
-                float rectX = x + j * (RECT_WIDTH + 5f);
-                RectF rect = new RectF(rectX, y - RECT_HEIGHT / 2, rectX + RECT_WIDTH, y + RECT_HEIGHT / 2);
-                canvas.drawRect(rect, rectPaint);
-                drawTextCentered(canvas, String.valueOf(arr[j]), rectX + RECT_WIDTH / 2, y, textPaint);
+        int maxValue = array[0];
+        for (int value : array) {
+            if (value > maxValue) maxValue = value;
+        }
+        if (maxValue == 0) maxValue = 1;
 
-                // Highlight
-                if (highlights.contains(j)) {
-                    canvas.drawRect(rect, highlightPaint);
-                }
+        // bar
+        for (int i = 0; i < array.length; i++) {
+            float barHeight = (array[i] / (float) maxValue) * MAX_HEIGHT;
+            float barX = xOffset + i * (BAR_WIDTH + BAR_SPACING);
+            float barY = startY - barHeight;
+            RectF barRect = new RectF(barX, barY, barX + BAR_WIDTH, startY);
+
+            Paint paint = barPaints[Math.min(level, MAX_LEVELS - 1)];
+            if (sortedIndices.contains(i)) {
+                canvas.drawRect(barRect, sortedPaint);
+            } else if (comparingIndices.contains(i)) {
+                canvas.drawRect(barRect, highlightPaint);
+            } else {
+                canvas.drawRect(barRect, paint);
             }
 
-            // line connect
-            if (i > 0 && i % 2 == 1) {
-                int parentIndex = (i - 1) / 2;
-                float parentX = startX + (parentIndex % 2 == 0 ? -HORIZONTAL_SPACING * (arrays.size() / 2 - parentIndex / 2) : HORIZONTAL_SPACING * (parentIndex / 2 + 1));
-                float parentY = startY + (parentIndex / 2) * VERTICAL_SPACING;
-                canvas.drawLine(parentX, parentY + RECT_HEIGHT / 2, x, y - RECT_HEIGHT / 2, linePaint);
-            }
+            // value
+            drawTextCentered(canvas, String.valueOf(array[i]), barX + BAR_WIDTH / 2, barY - 10, textPaint);
         }
     }
 
     private void drawTextCentered(Canvas canvas, String text, float x, float y, Paint paint) {
-        canvas.drawText(text, x, y + paint.getTextSize() / 3, paint);
+        canvas.drawText(text, x, y, paint);
     }
 }

@@ -8,7 +8,6 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import com.example.algoflow.data_structures.interfaces.RecursionSorting;
-import com.example.algoflow.data_structures.interfaces.Sorting;
 import com.example.algoflow.utils.AnimationManager;
 import com.example.algoflow.visualizer.RecursionSortVisualizer;
 
@@ -20,14 +19,15 @@ public class RecursionSortView extends View {
     private int[] array;
     private int arraySize = 5;
     private RecursionSortVisualizer visualizer;
-    private List<int[]> recursionArrays;
-    private List<Integer> highlights;
+    private List<Integer> comparingIndices;
+    private List<Integer> sortedIndices;
     private boolean isSorting = false;
     private boolean isPaused = false;
     private Thread sortThread;
     private RecursionSorting algorithms;
     private final Object pauseLock = new Object();
     private AnimationManager animationManager;
+    private int currentLevel = 0;
 
     public RecursionSortView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -41,8 +41,8 @@ public class RecursionSortView extends View {
             array[i] = random.nextInt(50);
         }
         visualizer = new RecursionSortVisualizer();
-        recursionArrays = new ArrayList<>();
-        highlights = new ArrayList<>();
+        comparingIndices = new ArrayList<>();
+        sortedIndices = new ArrayList<>();
         algorithms = null;
         animationManager = new AnimationManager(this, array, pauseLock);
     }
@@ -52,7 +52,7 @@ public class RecursionSortView extends View {
     }
 
     public void setArraySize(int size) {
-        if (size > 0 && size <= 20) {
+        if (size > 0 && size <= 10) {
             arraySize = size;
             reset();
         }
@@ -64,8 +64,8 @@ public class RecursionSortView extends View {
         for (int i = 0; i < arraySize; i++) {
             array[i] = random.nextInt(50);
         }
-        recursionArrays.clear();
-        highlights.clear();
+        comparingIndices.clear();
+        sortedIndices.clear();
         invalidate();
     }
 
@@ -81,36 +81,42 @@ public class RecursionSortView extends View {
         return animationManager;
     }
 
-    public void startSort() {
-        recursionArrays.clear();
-        recursionArrays.add(array.clone());
-        highlights.clear();
+    public void startSort(int level) {
+        currentLevel = level;
+        comparingIndices.clear();
+        sortedIndices.clear();
         invalidate();
     }
 
-    public void updateStep(int[] array, List<Integer> highlightIndices) {
+    public void updateStep(int[] array, List<Integer> compareIndices, List<Integer> sortedIndices, int level) {
         this.array = array.clone();
-        recursionArrays.add(array.clone());
-        highlights.clear();
-        highlights.addAll(highlightIndices);
-        postInvalidateDelayed(Sorting.ANIMATION_DELAY);
+        this.comparingIndices.clear();
+        this.comparingIndices.addAll(compareIndices);
+        this.sortedIndices.clear();
+        this.sortedIndices.addAll(sortedIndices);
+        currentLevel = level;
+        invalidate();
+        animationManager.animateStep(); // Đồng bộ với animation
     }
 
     public void finishSort(int[] sortedArray) {
         this.array = sortedArray.clone();
-        recursionArrays.add(sortedArray.clone());
-        highlights.clear();
-        postInvalidateDelayed(Sorting.ANIMATION_DELAY);
+        this.comparingIndices.clear();
+        this.sortedIndices.clear();
+        for (int i = 0; i < array.length; i++) {
+            this.sortedIndices.add(i);
+        }
+        currentLevel = 0;
+        invalidate();
+        animationManager.animateStep();
     }
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
-        if (!recursionArrays.isEmpty()) {
-            float startX = getWidth() / 2f;
-            float startY = 100f;
-            visualizer.drawRecursionTree(canvas, recursionArrays, highlights, startX, startY);
-        }
+        float startX = getWidth() / 2f;
+        float startY = getHeight() / 2f;
+        visualizer.drawBars(canvas, array, comparingIndices, sortedIndices, currentLevel, startX, startY);
     }
 
     public void startSorting() {
@@ -118,7 +124,7 @@ public class RecursionSortView extends View {
             if (algorithms == null) return;
             isSorting = true;
             isPaused = false;
-            startSort();
+            startSort(0);
             sortThread = new Thread(() -> algorithms.sort(array, this));
             sortThread.start();
         }
@@ -164,8 +170,8 @@ public class RecursionSortView extends View {
             array[i] = random.nextInt(50);
         }
         animationManager = new AnimationManager(this, array, pauseLock);
-        recursionArrays.clear();
-        highlights.clear();
+        comparingIndices.clear();
+        sortedIndices.clear();
         invalidate();
     }
 

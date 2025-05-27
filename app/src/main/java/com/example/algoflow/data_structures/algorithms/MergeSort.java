@@ -10,66 +10,82 @@ public class MergeSort implements RecursionSorting {
 
     @Override
     public void sort(int[] array, RecursionSortView view) {
-        view.startSorting();
-        mergeSort(array, 0, array.length - 1, view);
+        view.startSort(0);
+        mergeSort(array, 0, array.length - 1, 0, view);
         view.finishSort(array);
+        view.setSorting(false);
     }
 
-    private void mergeSort(int[] arr, int start, int end, RecursionSortView view) {
+    private void mergeSort(int[] arr, int start, int end, int level, RecursionSortView view) {
         if (start >= end) {
             return;
         }
 
         int mid = start + (end - start) / 2;
-        mergeSort(arr, start, mid, view);
-        mergeSort(arr, mid + 1, end, view);
-        merge(arr, start, mid, end, view);
+        mergeSort(arr, start, mid, level + 1, view);
+        mergeSort(arr, mid + 1, end, level + 1, view);
+        merge(arr, start, mid, end, level, view);
     }
 
-    private void merge(int[] arr, int start, int mid, int end, RecursionSortView view) {
-        int[] left = new int[mid - start + 1];
-        int[] right = new int[end - mid];
+    private int[] splitArr(int[] arr, int i, int size) {
+        int[] result = new int[size];
+        for (int j = 0; j < size; j++) {
+            result[j] = arr[i + j];
+        }
+        return result;
+    }
 
-        // Copy data to temporary arrays
-        for (int i = 0; i < left.length; i++) {
-            left[i] = arr[start + i];
-        }
-        for (int j = 0; j < right.length; j++) {
-            right[j] = arr[mid + 1 + j];
-        }
+    private void merge(int[] arr, int start, int mid, int end, int level, RecursionSortView view) {
+        int[] left = splitArr(arr, start, mid - start + 1);
+        int[] right = splitArr(arr, mid + 1, end - mid);
 
         int i = 0, j = 0, k = start;
-        List<Integer> highlights = new ArrayList<>();
+        List<Integer> comparingIndices = new ArrayList<>();
+        List<Integer> sortedIndices = new ArrayList<>();
 
         while (i < left.length && j < right.length) {
-            highlights.clear();
-            highlights.add(k); // Highlight
-            view.updateStep(arr.clone(), highlights);
+            comparingIndices.clear();
+            comparingIndices.add(start + i);
+            comparingIndices.add(mid + 1 + j);
+            view.updateStep(arr.clone(), comparingIndices, sortedIndices, level);
             view.checkPause();
 
             if (left[i] <= right[j]) {
-                arr[k++] = left[i++];
+                arr[k] = left[i++];
             } else {
-                arr[k++] = right[j++];
+                arr[k] = right[j++];
             }
+            comparingIndices.clear();
+            sortedIndices.add(k);
+            view.updateStep(arr.clone(), comparingIndices, sortedIndices, level);
+            view.checkPause();
+            k++;
         }
 
         while (i < left.length) {
-            highlights.clear();
-            highlights.add(k);
-            view.updateStep(arr.clone(), highlights);
+            comparingIndices.clear();
+            comparingIndices.add(start + i);
+            view.updateStep(arr.clone(), comparingIndices, sortedIndices, level);
             view.checkPause();
-            arr[k++] = left[i++];
+            arr[k] = left[i++];
+            comparingIndices.clear();
+            sortedIndices.add(k);
+            view.updateStep(arr.clone(), comparingIndices, sortedIndices, level);
+            view.checkPause();
+            k++;
         }
 
         while (j < right.length) {
-            highlights.clear();
-            highlights.add(k);
-            view.updateStep(arr.clone(), highlights);
+            comparingIndices.clear();
+            comparingIndices.add(mid + 1 + j);
+            view.updateStep(arr.clone(), comparingIndices, sortedIndices, level);
             view.checkPause();
-            arr[k++] = right[j++];
+            arr[k] = right[j++];
+            comparingIndices.clear();
+            sortedIndices.add(k);
+            view.updateStep(arr.clone(), comparingIndices, sortedIndices, level);
+            view.checkPause();
+            k++;
         }
-
-        view.updateStep(arr.clone(), new ArrayList<>());
     }
 }
