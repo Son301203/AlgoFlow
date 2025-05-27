@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import com.example.algoflow.data_structures.algorithms.LinkedList;
 import com.example.algoflow.models.ListNode;
-import com.example.algoflow.utils.LinkedListVisualizer;
+import com.example.algoflow.visualizer.LinkedListVisualizer;
 
 import java.util.Random;
 

@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import com.example.algoflow.data_structures.algorithms.QueueWithArray;
-import com.example.algoflow.utils.ArrayVisualizer;
+import com.example.algoflow.visualizer.ArrayVisualizer;
 
 public class QueueWithArrayView extends View {
     private QueueWithArray queue;

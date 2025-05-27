@@ -1,4 +1,4 @@
-package com.example.algoflow.utils;
+package com.example.algoflow.visualizer;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

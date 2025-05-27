@@ -6,7 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import com.example.algoflow.data_structures.algorithms.BinarySearchTree;
 import com.example.algoflow.models.TreeNode;
-import com.example.algoflow.utils.TreeVisualizer;
+import com.example.algoflow.visualizer.TreeVisualizer;
 
 import java.util.ArrayList;
 import java.util.List;

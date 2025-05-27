@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.example.algoflow.data_structures.algorithms.QueueWithLinkedList;
 import com.example.algoflow.models.ListNode;
-import com.example.algoflow.utils.LinkedListVisualizer;
+import com.example.algoflow.visualizer.LinkedListVisualizer;
 
 public class QueueWithLinkedListView extends View {
     private QueueWithLinkedList queue;

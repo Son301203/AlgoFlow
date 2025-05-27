@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.example.algoflow.data_structures.algorithms.StackWithLinkedList;
 import com.example.algoflow.models.ListNode;
-import com.example.algoflow.utils.LinkedListVisualizer;
+import com.example.algoflow.visualizer.LinkedListVisualizer;
 
 public class StackWithLinkedListView extends View {
     private StackWithLinkedList stack;

@@ -7,9 +7,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.algoflow.activities.StackWithArrayActivity;
 import com.example.algoflow.data_structures.algorithms.StackWithArray;
-import com.example.algoflow.utils.ArrayVisualizer;
+import com.example.algoflow.visualizer.ArrayVisualizer;
 
 public class StackWithArrayView extends View {
     private StackWithArray stack;

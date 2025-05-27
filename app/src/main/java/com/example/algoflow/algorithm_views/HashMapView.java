@@ -5,11 +5,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 import com.example.algoflow.data_structures.algorithms.HashMap;
-import com.example.algoflow.data_structures.interfaces.IHashing;
-import com.example.algoflow.models.HashMapData;
-import com.example.algoflow.utils.HashVisualizer;
-
-import java.util.ArrayList;
+import com.example.algoflow.visualizer.HashVisualizer;
 
 public class HashMapView extends View {
     private HashMap hash;
