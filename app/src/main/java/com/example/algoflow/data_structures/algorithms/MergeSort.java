@@ -4,9 +4,12 @@ import com.example.algoflow.algorithm_views.RecursionSortView;
 import com.example.algoflow.data_structures.interfaces.RecursionSorting;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MergeSort implements RecursionSorting {
+    private static final float LEVEL_OFFSET = 60f;
 
     @Override
     public void sort(int[] array, RecursionSortView view) {
@@ -21,33 +24,71 @@ public class MergeSort implements RecursionSorting {
             return;
         }
 
-        int mid = start + (end - start) / 2;
-        mergeSort(arr, start, mid, level + 1, view);
-        mergeSort(arr, mid + 1, end, level + 1, view);
-        merge(arr, start, mid, end, level, view);
-    }
-
-    private int[] splitArr(int[] arr, int i, int size) {
-        int[] result = new int[size];
-        for (int j = 0; j < size; j++) {
-            result[j] = arr[i + j];
+        // Show current subarray being processed
+        Map<Integer, Float> offsets = new HashMap<>();
+        for (int i = start; i <= end; i++) {
+            offsets.put(i, level * LEVEL_OFFSET);
         }
-        return result;
+        view.updateStepWithOffsets(arr, new ArrayList<>(), new ArrayList<>(), level, offsets);
+        view.checkPause();
+
+        int mid = start + (end - start) / 2;
+
+        // Recursively sort left half
+        mergeSort(arr, start, mid, level + 1, view);
+
+        // Recursively sort right half
+        mergeSort(arr, mid + 1, end, level + 1, view);
+
+        // Merge the sorted halves
+        merge(arr, start, mid, end, level, view);
+
+        // After merge, show elements back at current level
+        offsets.clear();
+        for (int i = start; i <= end; i++) {
+            offsets.put(i, level * LEVEL_OFFSET);
+        }
+        List<Integer> sortedIndices = new ArrayList<>();
+        for (int i = start; i <= end; i++) {
+            sortedIndices.add(i);
+        }
+        view.updateStepWithOffsets(arr, new ArrayList<>(), sortedIndices, level, offsets);
+        view.checkPause();
+
+        // If we're at the root level, move everything back to original position
+        if (level == 0) {
+            view.updateStepWithOffsets(arr, new ArrayList<>(), sortedIndices, 0, new HashMap<>());
+            view.checkPause();
+        }
     }
 
     private void merge(int[] arr, int start, int mid, int end, int level, RecursionSortView view) {
-        int[] left = splitArr(arr, start, mid - start + 1);
-        int[] right = splitArr(arr, mid + 1, end - mid);
+        int[] left = new int[mid - start + 1];
+        int[] right = new int[end - mid];
+
+        // Copy data to temp arrays
+        for (int i = 0; i < left.length; i++) {
+            left[i] = arr[start + i];
+        }
+        for (int j = 0; j < right.length; j++) {
+            right[j] = arr[mid + 1 + j];
+        }
 
         int i = 0, j = 0, k = start;
-        List<Integer> comparingIndices = new ArrayList<>();
+        Map<Integer, Float> offsets = new HashMap<>();
         List<Integer> sortedIndices = new ArrayList<>();
 
+        // Show merge process
         while (i < left.length && j < right.length) {
-            comparingIndices.clear();
-            comparingIndices.add(start + i);
-            comparingIndices.add(mid + 1 + j);
-            view.updateStep(arr.clone(), comparingIndices, sortedIndices, level);
+            // Highlight elements being compared
+            offsets.clear();
+            for (int idx = start; idx <= end; idx++) {
+                offsets.put(idx, level * LEVEL_OFFSET);
+            }
+
+            List<Integer> comparing = new ArrayList<>();
+            comparing.add(k);
+            view.updateStepWithOffsets(arr, comparing, sortedIndices, level, offsets);
             view.checkPause();
 
             if (left[i] <= right[j]) {
@@ -55,35 +96,36 @@ public class MergeSort implements RecursionSorting {
             } else {
                 arr[k] = right[j++];
             }
-            comparingIndices.clear();
+
             sortedIndices.add(k);
-            view.updateStep(arr.clone(), comparingIndices, sortedIndices, level);
+            view.updateStepWithOffsets(arr, new ArrayList<>(), sortedIndices, level, offsets);
             view.checkPause();
             k++;
         }
 
+        // Copy remaining elements
         while (i < left.length) {
-            comparingIndices.clear();
-            comparingIndices.add(start + i);
-            view.updateStep(arr.clone(), comparingIndices, sortedIndices, level);
-            view.checkPause();
+            offsets.clear();
+            for (int idx = start; idx <= end; idx++) {
+                offsets.put(idx, level * LEVEL_OFFSET);
+            }
+
             arr[k] = left[i++];
-            comparingIndices.clear();
             sortedIndices.add(k);
-            view.updateStep(arr.clone(), comparingIndices, sortedIndices, level);
+            view.updateStepWithOffsets(arr, new ArrayList<>(), sortedIndices, level, offsets);
             view.checkPause();
             k++;
         }
 
         while (j < right.length) {
-            comparingIndices.clear();
-            comparingIndices.add(mid + 1 + j);
-            view.updateStep(arr.clone(), comparingIndices, sortedIndices, level);
-            view.checkPause();
+            offsets.clear();
+            for (int idx = start; idx <= end; idx++) {
+                offsets.put(idx, level * LEVEL_OFFSET);
+            }
+
             arr[k] = right[j++];
-            comparingIndices.clear();
             sortedIndices.add(k);
-            view.updateStep(arr.clone(), comparingIndices, sortedIndices, level);
+            view.updateStepWithOffsets(arr, new ArrayList<>(), sortedIndices, level, offsets);
             view.checkPause();
             k++;
         }

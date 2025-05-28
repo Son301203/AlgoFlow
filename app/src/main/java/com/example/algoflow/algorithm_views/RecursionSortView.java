@@ -12,11 +12,14 @@ import com.example.algoflow.utils.AnimationManager;
 import com.example.algoflow.visualizer.RecursionSortVisualizer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class RecursionSortView extends View {
     private int[] array;
+    private Map<Integer, Float> elementOffsets = new HashMap<>();
     private int arraySize = 5;
     private RecursionSortVisualizer visualizer;
     private List<Integer> comparingIndices;
@@ -28,6 +31,7 @@ public class RecursionSortView extends View {
     private final Object pauseLock = new Object();
     private AnimationManager animationManager;
     private int currentLevel = 0;
+    private float dynamicOffset = 0f;
 
     public RecursionSortView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -83,20 +87,22 @@ public class RecursionSortView extends View {
 
     public void startSort(int level) {
         currentLevel = level;
+        dynamicOffset = 0f;
         comparingIndices.clear();
         sortedIndices.clear();
         invalidate();
     }
 
-    public void updateStep(int[] array, List<Integer> compareIndices, List<Integer> sortedIndices, int level) {
+    public void updateStep(int[] array, List<Integer> compareIndices, List<Integer> sortedIndices, int level, float offset) {
         this.array = array.clone();
         this.comparingIndices.clear();
         this.comparingIndices.addAll(compareIndices);
         this.sortedIndices.clear();
         this.sortedIndices.addAll(sortedIndices);
         currentLevel = level;
+        dynamicOffset = offset;
         invalidate();
-        animationManager.animateStep(); // Đồng bộ với animation
+        animationManager.animateStep();
     }
 
     public void finishSort(int[] sortedArray) {
@@ -107,6 +113,24 @@ public class RecursionSortView extends View {
             this.sortedIndices.add(i);
         }
         currentLevel = 0;
+        dynamicOffset = 0f; 
+        invalidate();
+        animationManager.animateStep();
+    }
+
+    public void updateStepWithOffsets(int[] array, List<Integer> compareIndices,
+                                      List<Integer> sortedIndices, int level,
+                                      Map<Integer, Float> elementOffsets) {
+        this.array = array.clone();
+        this.comparingIndices.clear();
+        this.comparingIndices.addAll(compareIndices);
+        this.sortedIndices.clear();
+        this.sortedIndices.addAll(sortedIndices);
+        currentLevel = level;
+
+        // Store element offsets for drawing
+        this.elementOffsets = new HashMap<>(elementOffsets);
+
         invalidate();
         animationManager.animateStep();
     }
@@ -116,7 +140,8 @@ public class RecursionSortView extends View {
         super.onDraw(canvas);
         float startX = getWidth() / 2f;
         float startY = getHeight() / 2f;
-        visualizer.drawBars(canvas, array, comparingIndices, sortedIndices, currentLevel, startX, startY);
+        visualizer.drawBars(canvas, array, comparingIndices, sortedIndices,
+                currentLevel, startX, startY, elementOffsets);
     }
 
     public void startSorting() {
